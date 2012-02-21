@@ -1,8 +1,8 @@
 <div class="comment">
   <h4>
     <span class="counter"><%=comment_counter+1-%></span>
-    <%= link_to comment.user.username, user_path(comment.user.id) unless comment.user.nil? -%>
-    <span class="timestamp">at <%= nice_date comment.created_at -%></span>
+    <%= link_to comment.user.first_name + "  " + comment.user.last_name, user_path(comment.user.id) unless comment.user.nil? -%>
+    <span class="timestamp">at <%=  comment.created_at.strftime("%d/%m/%Y %H:%M") -%></span>
     <% if @current_user.admin? -%>
       <span class="delete-comment"><%= link_to 'Delete', ticket_comment_path(ticket.id, comment.id), :confirm => "Really delete comment ##{comment_counter+1}?", :method => :delete -%></span>
     <% end -%>

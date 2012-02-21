@@ -1,27 +1,46 @@
-<dt><label for="user_username">Username</label></dt>
+
+<% if !@current_user.nil? and @current_user.admin %>
+	<dt><label for="user_it">เจ้าหน้าที่ IT</label></dt>
+	<dd><%= form.check_box :it,{},true,false %>ใช่/ไม่ใช่<dd>
+
+        <dt><label for="user_staff">Staff</label></dt>
+        <dd><%= form.check_box :staff,{},true,false %>ใช่/ไม่ใช่<dd>
+<% end %>
+
+<dt><label for="user_username">ชื่อใช้งาน</label></dt>
 <dd><%= form.text_field :username, :class => "textfield" %></dd>
 
-<dt><label for="user_first_name">First name</label></dt>
+<dt><label for="user_first_name">ชื่อ</label></dt>
 <dd><%= form.text_field :first_name, :class => "textfield" -%></dd>
 
-<dt><label for="user_last_name">Last name</label></dt>
+<dt><label for="user_last_name">นามสกุล</label></dt>
 <dd><%= form.text_field :last_name, :class => "textfield" -%></dd>
 
-<dt><label for="user_time_zone">Time zone</label></dt>
+<% if @current_user.admin %>
+	<dt><label for="user_group_id">หน่วยงาน</label></dt>
+	<dd><%= form.collection_select :group_id, Group.find(:all), :id, :name, { :include_blank => true }, { :class => "selectbox" } -%></dd>
+<% else %>
+	<dt><label>หน่วยงาน</label></dt>
+	<dd><%= Group.find(:first,:conditions => "id = #{@current_user.group_id}").name %><input type="hidden" name="user[group_id]" value="<%= @current_user.group_id %>"></dd>	
+<% end %>
+
+<dt><label for="user_time_zone">โซนเวลา</label></dt>
 <dd><%= form.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones, { :default => "Central Time (US & Canada)" }, { :class => "selectbox" } %></dd>
 
-<dt><label for="user_email">Email</label></dt>
+<dt><label for="user_email">อีเมล</label></dt>
 <dd><%= form.text_field :email, :class => "textfield" -%></dd>
 
-<dt><label for="user_email_confirmation">Confirm Email</label></dt>
+<dt><label for="user_email_confirmation">ยืนยัน อีเมล</label></dt>
 <dd><%= form.text_field :email_confirmation, :class => "textfield" -%></dd>
 
 <% if form.object.new_record? %>
-  <dt><label for="user_password">Password</label></dt>
+  <dt><label for="user_password">รหัสผ่าน</label></dt>
 <% else %>
-  <dt><label for="user_password">Change Password</label></dt>
+  <dt><label for="user_password">เปลี่ยนรหัสผ่าน</label></dt>
 <% end %>
 <dd><%= form.password_field :password, :class => "textfield" %></dd>
 
-<dt><label for="user_password_confirmation">Confirm Password</label></dt>
+<dt><label for="user_password_confirmation">ยืนยัน รหัสผ่าน</label></dt>
 <dd><%= form.password_field :password_confirmation, :class => "textfield" %></dd>
+
+

@@ -1,23 +1,23 @@
 <% content_for :button_list do %>
 <div class="right-container">
-  <%= button_to 'New ticket', new_ticket_path, :method => :get, :class => "green button" %>
-  <%= button_to 'New contact', new_contact_path, :method => :get, :class => "green button" %>
+  <%= button_to 'เพิ่มตั๋วงาน', new_ticket_path, :method => :get, :class => "green button" %>
+  <%= button_to 'เพิ่มผู้ใช้งาน', new_contact_path, :method => :get, :class => "green button" %>
 </div>
 <% end %>
 
 <h2>Dashboard</h2>
 
-<h3 class="toggle" id="active-tickets">Active Tickets</h3>
+<h3 class="toggle" id="active-tickets">ตั๋วงานที่ใช้งานอยู่</h3>
 <div id="active-listing">
   <table class="listing" cellspacing="0">
   <thead>
     <tr class="header">
-      <th>Ticket #</th>
-      <th>Title</th>
-      <th>Group</th>
-      <th>Status</th>
-      <th>Owner</th>
-      <th>Last Activity</th>
+      <th>เบอร์ตั๋วงาน #</th>
+      <th>หัวข้อ</th>
+      <th>หน่วยงาน</th>
+      <th>สถานะ</th>
+      <th>ผู้รับงาน</th>
+      <th>ข้อมูลแก้ไขล่าสุดเมื่อ</th>
     </tr>
   </thead>
   <tbody>
@@ -31,7 +31,7 @@
       <td><%=h truncate(ticket.title, :length => 40) %></td>
       <td><%= ticket.group.name %></td>
       <td><%= ticket.status.name %></td>
-      <td><%= link_to ticket.owner.username, user_path(ticket.owner.id) unless ticket.owner.nil? %></td>
+      <td><%= link_to ticket.owner.first_name+"  "+ ticket.owner.last_name, user_path(ticket.owner.id) unless ticket.owner.nil? %></td>
       <td><%= time_ago_in_words ticket.updated_at %> ago</td>
     </tr>
     <% end %>
@@ -39,17 +39,17 @@
   </table>
 </div>
 
-<h3 class="toggle" id="closed-tickets">Recently Closed Tickets</h3>
+<h3 class="toggle" id="closed-tickets">ตั๋วงานที่ปิดแล้ว</h3>
 <div id="closed-listing">
   <table class="listing" cellspacing="0">
   <thead>
     <tr class="header">
-      <th>Ticket #</th>
-      <th>Title</th>
-      <th>Group</th>
-      <th>Status</th>
-      <th>Owner</th>
-      <th>Closed At</th>
+      <th>เบอร์ตั๋วงาน #</th>
+      <th>หัวข้อ</th>
+      <th>หน่วยงาน</th>
+      <th>สถานะ</th>
+      <th>ผู้รับงาน</th>
+      <th>ปิดตั๋วงานเมื่อ</th>
     </tr>
   </thead>
   <tbody>
@@ -63,14 +63,15 @@
       <td><%=h truncate(ticket.title, :length => 40) %></td>
       <td><%= ticket.group.name %></td>
       <td><%= ticket.status.name %></td>
-      <td><%= link_to ticket.owner.username, user_path(ticket.owner.id) unless ticket.owner.nil? %></td>
-      <td><%= nice_date ticket.closed_at unless ticket.closed_at.nil? %></td>
+      <td><%= link_to ticket.owner.first_name+"  "+ ticket.owner.last_name, user_path(ticket.owner.id) unless ticket.owner.nil? %></td>
+      <td><%= to_datetime_th ticket.closed_at unless ticket.closed_at.nil? %></td>
     </tr>
     <% end %>
   </tbody>
   </table>
 </div>
 
+<!--
 <h3 class="toggle" id="timeline-toggle">Timeline</h3>
 <div id="timeline-wrapper">
   <div class="timeline left">
@@ -100,3 +101,4 @@
     <span class="timeline-label">Closed Tickets</span>
   </div>
 </div>
+-->

@@ -1,5 +1,5 @@
 <div class="right" id="controls">
-  <%= link_to 'Edit', edit_contact_path, :class => "edit-contact", :title => 'Edit contact' -%> |
+  <%= link_to 'แก้ไข', edit_contact_path, :class => "edit-contact", :title => 'Edit contact' -%> |
   <% if @current_user.admin? -%>
     <% unless @contact.enabled? -%>
       <%= link_to 'Enable', toggle_contact_path, :confirm => "Really enable contact #{@contact.full_name}?", :method => :post, :class => 'enable', :title => 'Enable contact' -%> |
@@ -14,21 +14,21 @@
 
 <table class="profile <%= @contact.enabled? ? '' : 'disabled' -%>">
   <tr>
-    <td class="field">First name:</td><td class="value"><%=h @contact.first_name -%></td>
-    <td class="field">Last name:</td><td class="value"><%=h @contact.last_name -%></td>
+    <td class="field">ชื่อ:</td><td class="value"><%=h @contact.first_name -%></td>
+    <td class="field">นามสกุล:</td><td class="value"><%=h @contact.last_name -%></td>
   </tr>
   <tr>
-    <td class="field">Email:</td><td class="value"><%=h @contact.email -%></td>
-    <td class="field">Affiliation:</td><td class="value"><%=h @contact.affiliation -%></td>
+    <td class="field">อีเมล:</td><td class="value"><%=h @contact.email -%></td>
+    <td class="field">การติดต่อ:</td><td class="value"><%=h @contact.affiliation -%></td>
   </tr>
   <tr>
-    <td class="field">Mobile phone:</td><td class="value"><%= h @contact.mobile_phone -%></td>
-    <td class="field">Office phone:</td><td class="value"><%=h @contact.office_phone -%></td>
+    <td class="field">โทรศัพท์มือถือ:</td><td class="value"><%= h @contact.mobile_phone -%></td>
+    <td class="field">โทรศัพท์ภายใน:</td><td class="value"><%=h @contact.office_phone -%></td>
   </tr>
   <tr>
-    <td class="field">Updated at:</td>
+    <td class="field">วันที่แก้ไขข้อมูล:</td>
     <td class="value" colspan="3"><%= nice_date @contact.updated_at -%></td>
   </tr>
-  <tr><td class="field-row" colspan="4">Notes:</td></tr>
+  <tr><td class="field-row" colspan="4">หมายเหตุ:</td></tr>
   <tr><td class="value-row" colspan="4"><%= simple_format(@contact.notes) -%></td></tr>
 </table>

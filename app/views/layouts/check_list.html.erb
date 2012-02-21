@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta name="description" content="TicketMule support ticket tracking" />
+  <title><%= controller.controller_name.capitalize %> &#8250; TicketMule</title>
+  <%= stylesheet_link_tag 'screen', :media => "screen, projection" %>
+  <%= stylesheet_link_tag 'print', :media => "print" %>
+  <%= javascript_include_tag 'jquery.min', 'application', :cache => true -%>
+  <%= yield(:head) -%>
+  <link rel="shortcut icon" type="image/ico" href="<%=app_root%>/favicon.ico" />  
+</head>
+
+<body>
+<div id="content">
+
+<div id="header">
+  <div id="inner-header">
+    <h1>HISRO IT Support</h1>
+    
+    <div id="nav">
+      <ul id="nav-right">
+	        <%= tab_for :list_open, list_open_index_path, "ตั๋วงานที่กำลังดำเนินการ" %>
+                <%= tab_for :list_close, list_close_index_path, "ตั๋วงานที่ดำเนินการเสร็จแล้ว" %>
+	
+
+      </ul>
+    </div><!-- end nav -->
+  </div><!-- end inner-header -->
+</div><!-- end header -->
+
+<div id="shadow"></div>
+
+<div id="main">
+  <div id="left-column">
+    <div class="box">
+      <%= show_flash %>
+      <%= yield %>
+    </div>
+  </div><!-- end left-column -->
+  <div id="right-column"></div><!-- end right-column -->
+</div><!-- end main -->
+
+<br/><br/></div><!-- end content -->
+
+<div id="footer">
+  <p>จัดทำโดย<strong><a href="#">   ฝ่ายเทคโนโลยีสารสนเทศ</a></strong></p>
+</div>
+
+</body>
+
+</html>

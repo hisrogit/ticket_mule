@@ -13,7 +13,7 @@ class CommentsController < ApplicationController
     if params[:close_ticket]
       status = Status.find(:first, :conditions => "name = 'Closed'")
       @ticket.update_attribute(:status_id, status.id)
-      @comment.comment = "<strong>Status</strong> changed to closed<br/>" + @comment.comment
+      @comment.comment = "<strong>สถานะ</strong> เปลี่ยนเป็น  closed<br/>" + @comment.comment
     end
 
     respond_to do |format|

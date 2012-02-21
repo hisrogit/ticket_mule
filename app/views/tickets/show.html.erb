@@ -1,27 +1,29 @@
 <% content_for :button_list do %>
 <div class="right-container">
-  <%= button_to 'New ticket', new_ticket_path, :method => :get, :class => 'green button' -%>
-  <%= button_to 'New contact', new_contact_path, :method => :get, :class => 'green button' -%>
+  <%= button_to 'เพิ่มตั่วงาน', new_ticket_path, :method => :get, :class => 'green button' -%>
+  <%= button_to 'เพิ่มผู้ติดต่อ', new_contact_path, :method => :get, :class => 'green button' -%>
 </div>
 <% end %>
 
 <div class="right" id="controls">
-<%= link_to 'Edit', edit_ticket_path(@ticket), :class => 'edit-ticket', :title => 'Edit ticket' -%> |
+<%# if @current_user.admin or @current_user.staff  %>
+	<%= link_to 'แก้ไข', edit_ticket_path(@ticket), :class => 'edit-ticket', :title => 'Edit ticket' -%> |
+<%# end %>
 <%= link_to 'Pdf', ticket_path(@ticket, :format => 'pdf'), :class => 'pdf', :title => 'Download pdf' -%> |
 <% if @alert.nil? -%>
   <%= link_to 'Add Alert', { :controller => 'alerts', :action => 'create', :id => @ticket.id }, :confirm => "Really add alert for ticket ##{@ticket.id}?", :method => :post, :class => 'add-alert', :title => 'Add ticket alert' -%> |
 <% else -%>
   <%= link_to 'Remove Alert', { :action => 'destroy', :controller => 'alerts', :id => @alert.id }, :confirm => "Really remove alert for ticket ##{@ticket.id}?", :method => :delete, :class => 'delete-alert', :title => 'Remove alert' -%> |
 <% end -%>
-<%= link_to_function 'Add Comment', "$('#add-comment').slideToggle();", :class => 'add-comment', :title => 'Add comment' -%> |
-<%= link_to_function 'Add Attachment', "$('#add-attachment').slideToggle();", :class => 'add-attach', :title => 'Add attachment' -%> |
+<%= link_to_function 'เพิ่มคำอธิบาย', "$('#add-comment').slideToggle();", :class => 'add-comment', :title => 'Add comment' -%> |
+<%= link_to_function 'แนบไฟล์', "$('#add-attachment').slideToggle();", :class => 'add-attach', :title => 'Add attachment' -%> |
 <% if @current_user.admin? -%>
-  <%= link_to 'Delete', @ticket, :confirm => "Really delete ticket ##{@ticket.id} and all its associated data?", :method => :delete, :class => 'delete', :title => 'Delete ticket' -%> |
+  <%= link_to 'ลบ', @ticket, :confirm => "Really delete ticket ##{@ticket.id} and all its associated data?", :method => :delete, :class => 'delete', :title => 'Delete ticket' -%> |
 <% end -%>
-<%= link_to 'Back', :back, :class => 'back', :title => 'Go back' -%>
+<%= link_to 'ย้อนกลับ', :back, :class => 'back', :title => 'Go back' -%>
 </div>
 
-<h2 class="left <%= @ticket.closed? ? 'disabled' : '' -%>">Ticket #<%= @ticket.id -%></h2>
+<h2 class="left <%= @ticket.closed? ? 'disabled' : '' -%>">ตั๋วงาน #<%= @ticket.id -%></h2>
 <br class="clear"/>
 
 <%= error_messages_for :comment %>
@@ -29,27 +31,35 @@
 
 
 <table class="profile <%= @ticket.closed? ? 'disabled' : '' -%>">
-  <tr><td class="field">Title:</td><td colspan="3" class="value"><%=h @ticket.title -%></td></tr>
+  <tr><td class="field">หัวข้อ:</td><td colspan="3" class="value"><%=h @ticket.title -%></td></tr>
   <tr>
-    <td class="field">Contact:</td><td class="value"><%= link_to @ticket.contact.full_name, contact_path(@ticket.contact.id) -%></td>
-    <td class="field">Created by:</td><td class="value"><%= link_to @ticket.creator.username, user_path(@ticket.creator.id) unless @ticket.creator.nil? -%></td>
+    <td class="field">ผู้ติดต่อ:</td><td class="value"><%= link_to @ticket.contact.full_name, contact_path(@ticket.contact.id) -%></td>
+    <td class="field">สร้างโดย:</td><td class="value"><%= link_to @ticket.creator.first_name + "  " + @ticket.creator.last_name, user_path(@ticket.creator.id) unless @ticket.creator.nil? -%></td>
   </tr>
   <tr>
-    <td class="field">Created at:</td><td class="value"><%= nice_date @ticket.created_at -%></td>
-    <td class="field">Updated at:</td><td class="value"><%= nice_date @ticket.updated_at -%></td>
+    <td class="field">สร้างเมื่อ:</td><td class="value"><%= to_datetime_th @ticket.created_at -%></td>
+    <td class="field">แก้ไขเมื่อ:</td><td class="value"><%= to_datetime_th @ticket.updated_at -%></td>
   </tr>
   <tr>
-    <td class="field">Owner:</td><td class="value"><%= link_to @ticket.owner.username, user_path(@ticket.owner.id) unless @ticket.owner.nil? %></td>
-    <td class="field">Group:</td><td class="value"><%= @ticket.group.name unless @ticket.group.nil? -%></td>
+    <td class="field">ผู้รับงาน:</td><td class="value"><%= link_to @ticket.owner.first_name+"  "+@ticket.owner.last_name, user_path(@ticket.owner.id) unless @ticket.owner.nil? %></td>
+    <td class="field">หน่วยงาน:</td><td class="value"><%= @ticket.group.name unless @ticket.group.nil? -%></td>
   </tr>
   <tr>
-    <td class="field">Status:</td><td class="value"><%= @ticket.status.name -%></td>
-    <td class="field">Priority:</td><td class="value"><%= @ticket.priority.name -%></td>
+    <td class="field">สถานะ:</td><td class="value">
+      <% if @ticket.status.admin == true %>
+	<%= @ticket.status.name -%>
+	<br>
+	<%= to_date_th @ticket.date_status -%>
+      <% else %>
+	<%= @ticket.status.name -%>
+      <% end %>
+    </td>
+    <td class="field">ลำดับตวามสำคัญ:</td><td class="value"><%= @ticket.priority.name -%></td>
   </tr>
   <% if @ticket.closed? %>
-  <tr><td class="field">Closed at:</td><td colspan="3" class="value"><%= nice_date @ticket.closed_at unless @ticket.closed_at.nil? %></td></tr>
+  <tr><td class="field">ปิดเมื่อ:</td><td colspan="3" class="value"><%= to_datetime_th @ticket.closed_at unless @ticket.closed_at.nil? %></td></tr>
   <% end %>
-  <tr><td class="field-row" colspan="4">Details:</td></tr>
+  <tr><td class="field-row" colspan="4">รายละเอียด:</td></tr>
   <tr><td class="value-row" colspan="4"><%= simple_format(@ticket.details) -%></td></tr>
 </table>
 
@@ -81,7 +91,7 @@
 <% end -%>
 
 <% unless @ticket.comments.empty? -%>
-  <h3 class="toggle" id="comments-toggle">Comments</h3>
+  <h3 class="toggle" id="comments-toggle">คำอธิบาย, ความคิดเห็น</h3>
   <div id="comment-list">
     <%= render :partial => @ticket.comments, :locals => { :ticket => @ticket } -%>
   </div>

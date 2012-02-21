@@ -3,45 +3,52 @@
 <ul id="filter-links">
   <%= ticket_filter_links 'open', @current_user.id -%>
   <%= ticket_filter_links 'closed', @current_user.id -%>
-  <%= ticket_filter_links 'open' -%>
-  <%= ticket_filter_links 'closed' -%>
-  <li><%= link_to_function "Custom Filter...", "$('#ticket-filter').toggle();" -%></li>
+  <% if @current_user.admin %>
+  	<%= ticket_filter_links 'open' -%>
+  	<%= ticket_filter_links 'closed' -%>
+  	<li><%= link_to_function "Custom Filter...", "$('#ticket-filter').toggle();" -%></li>
+  <% end %>
 </ul>
 
 <div class="right-container">
 <% form_for @search, :html => { :id => 'ticket-filter' } do |f| %>
   <p>
-  <%= f.label :group_id_equals, "Group" %>
-  <%= f.collection_select :group_id_equals, Group.all(:order => "name"), :id, :name, { :include_blank => true}, { :class => "selectbox" } %>
+  <%= f.label :group_id_equals, "หน่วยงาน" %>
+  <%= f.collection_select :group_id_equals, 
+	Group.all(:order => "name"), 
+	:id, 
+	:name, 
+	{ :include_blank => true}, 
+	{ :class => "selectbox", :style => "width:280px" } %>
   </p>
 
   <p>
-  <%= f.label :contact_id_equals, "Contact" %>
-  <%= f.collection_select :contact_id_equals, Contact.all(:order => "last_name"), :id, :full_name, { :include_blank => true}, { :class => "selectbox" } %>
+  <%= f.label :contact_id_equals, "ผู้ติดต่อ" %>
+  <%= f.collection_select :contact_id_equals, Contact.all(:order => "last_name"), :id, :full_name, { :include_blank => true}, { :class => "selectbox", :style => "width:280px" } %>
   </p>
 
   <p>
-  <%= f.label :status_id_equals, "Status" %>
+  <%= f.label :status_id_equals, "สถานะ" %>
   <%= f.collection_select :status_id_equals, Status.all, :id, :name, { :include_blank => true}, { :class => "selectbox" } %>
   </p>
 
   <p>
-  <%= f.label :priority_id_equals, "Priority" %>
+  <%= f.label :priority_id_equals, "ลำดับความสำคัญ" %>
   <%= f.collection_select :priority_id_equals, Priority.all, :id, :name, { :include_blank => true}, { :class => "selectbox" } %>
   </p>
 
   <p>
-  <%= f.label :owned_by_equals, "Owner" %>
-  <%= f.collection_select :owned_by_equals, User.all(:order => "username"), :id, :username, { :include_blank => true }, { :class => "selectbox" } %>
+  <%= f.label :owned_by_equals, "ผู้รับงาน" %>
+  <%= f.collection_select :owned_by_equals, User.all(:order => "username",:conditions => "it = true"), :id, :full_name, { :include_blank => true }, { :class => "selectbox", :style => "width:280px" } %>
   </p>
 
   <p>
-  <label for="filter-start">From</label>
+  <label for="filter-start">จาก</label>
   <%= f.text_field :created_at_gte, :size => 11, :id => 'filter-start', :class => 'textfield' -%>
   </p>
 
   <p>
-  <label for="filter-end">To</label>
+  <label for="filter-end">ถึง</label>
   <%= f.text_field :created_at_lt, :size => 11, :id => 'filter-end', :class => 'textfield' -%>
   </p>
 

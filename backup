@@ -1,0 +1,1 @@
+<%= link_to @current_user.username, user_path(@current_user.id) -%>

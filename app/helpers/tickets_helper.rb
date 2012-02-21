@@ -7,7 +7,7 @@ module TicketsHelper
     @group_select = Group.enabled(:select => "id, name")
     @status_select = Status.enabled(:select => "id, name")
     @priority_select = Priority.enabled(:select => "id, name")
-    @owner_select = User.enabled(:select => "id, username")
+    @owner_select = User.owner_it(:select => "id, username")
 
     unless ticket.id.blank?
       unless ticket.contact.blank? || ticket.contact.enabled?
@@ -41,15 +41,15 @@ module TicketsHelper
   def ticket_filter_links(status_name, user_id=nil)
     if user_id.nil?
       if status_name.downcase == 'closed'
-        content_tag(:li, link_to("All Closed Tickets", tickets_path + "?search[status_id_equals]=#{@closed_status.id}"))
+        content_tag(:li, link_to("ตั๋วงานที่ปิดทั้งหมด", tickets_path + "?search[status_id_equals]=#{@closed_status.id}"))
       else
-        content_tag(:li, link_to("All Active Tickets", tickets_path))
+        content_tag(:li, link_to("ตั๋วงานที่เปิดทั้งหมด", tickets_path + "?search[status_id_equals]=#{@open_status.id}"))
       end
     else
       if status_name.downcase == 'closed'
-        content_tag(:li, link_to("My Closed Tickets", tickets_path + "?search[status_id_equals]=#{@closed_status.id}&search[owned_by_equals]=#{user_id}"))
+        content_tag(:li, link_to("ตั๋วงานที่ปิดของตัวเอง", tickets_path + "?search[status_id_equals]=#{@closed_status.id}&search[owned_by_equals]=#{user_id}"))
       else
-        content_tag(:li, link_to("My Open Tickets", tickets_path + "?search[status_id_equals]=#{@open_status.id}&search[owned_by_equals]=#{user_id}"))
+        content_tag(:li, link_to("ตั๋วงานที่เปิดของตัวเอง", tickets_path + "?search[status_id_equals]=#{@open_status.id}&search[owned_by_equals]=#{user_id}"))
       end
     end
   end

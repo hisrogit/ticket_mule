@@ -10,10 +10,10 @@
 <%= error_messages_for :user %>
 
 <ul class="jquery-tabs">
-  <li><a href="#">Groups</a></li>
-  <li><a href="#">Statuses</a></li>
-  <li><a href="#">Priorities</a></li>
-  <li><a href="#">Users</a></li>
+  <li><a href="#">หน่วยงาน</a></li>
+  <li><a href="#">สถานะตั๋วงาน</a></li>
+  <li><a href="#">ลำดับความสำคัญ</a></li>
+  <li><a href="#">เพิ่มผู้ใช้งาน</a></li>
 </ul>
 
 <div class="jquery-tab-panes">
@@ -43,7 +43,7 @@
     <% form_for Group.new, :url => { :action => 'add_group', :controller => 'admin' }, :html => { :class => 'admin-form' } do |f| -%>
       <p>
         <%= f.text_field :name, :class => 'textfield' -%>
-        <%= f.submit "Add Group", :class => 'button' -%>
+        <%= f.submit "เพิ่มหน่วยงาน", :class => 'button' -%>
       </p>
     <% end -%>
   </div>
@@ -73,7 +73,7 @@
     <% form_for Status.new, :url => { :action => 'add_status', :controller => 'admin' }, :html => { :class => 'admin-form' } do |f| -%>
       <p>
         <%= f.text_field :name, :class => 'textfield' -%>
-        <%= f.submit "Add Status", :class => 'button' -%>
+        <%= f.submit "เพิ่มสถานะตั๋วงาน", :class => 'button' -%>
       </p>
     <% end -%>
   </div>
@@ -103,46 +103,60 @@
     <% form_for Priority.new, :url => { :action => 'add_priority', :controller => 'admin' }, :html => { :class => 'admin-form' } do |f| -%>
       <p>
         <%= f.text_field :name, :class => 'textfield' -%>
-        <%= f.submit "Add Priority", :class => 'button' -%>
+        <%= f.submit "เพิ่มลำดับความสำคัญ", :class => 'button' -%>
       </p>
     <% end -%>
   </div>
   <div class="pane">
     <% form_for :user, :url => { :action => 'add_user', :controller => 'admin' }, :html => { :id => 'add-user', :class => 'admin-form' } do |f| -%>
+	  <p>
+	  	<label for="user_it">เจ้าหน้าที่ IT</label>
+		<input type="checkbox" name="user[it]" id="user_it" value="true">ใช่
+	  </p>
+
       <p>
-        <label for="user_username">Username</label>
+	<label for="user_staff">Staff</label>
+        <%= f.check_box :staff,{},true,false %>ใช่</p>
+
+
+      <p>
+        <label for="user_username">ชื่อใช้งาน</label>
         <%= f.text_field :username, :size => 30, :class => 'textfield' -%>
       </p>
       <p>
-        <label for="user_first_name">First name</label>
+        <label for="user_first_name">ชื่อ</label>
         <%= f.text_field :first_name, :size => 30, :class => 'textfield' -%>
       </p>
       <p>
-        <label for="user_last_name">Last name</label>
+        <label for="user_last_name">นามสกุล</label>
         <%= f.text_field :last_name, :size => 30, :class => 'textfield' -%>
+      </p> 	  
+      <p>
+        <label for="user_group_id">หน่วยงาน</label></dt>
+        <%= f.collection_select :group_id, Group.find(:all), :id, :name, { :include_blank => true }, { :class => "selectbox" } -%>
       </p>
       <p>
-        <label for="user_time_zone">Time zone</label>
-        <%= f.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones, { :default => 'Central Time (US & Canada)' }, { :class => 'selectbox' } -%>
+        <label for="user_time_zone">โซนเวลา</label>
+        <%= f.time_zone_select :time_zone, ActiveSupport::TimeZone.us_zones, { :default => 'Bangkok' }, { :class => 'selectbox' } -%>
       </p>
       <p>
-        <label for="user_email">Email</label>
+        <label for="user_email">อีเมล</label>
         <%= f.text_field :email, :size => 30, :class => 'textfield' -%>
       </p>
       <p>
-        <label for="user_email_confirmation">Confirm Email</label>
+        <label for="user_email_confirmation">ยืนยัน อีเมล</label>
         <%= f.text_field :email_confirmation, :size => 30, :class => 'textfield' -%>
       </p>
       <p>
-        <label for="user_password">Password</label>
+        <label for="user_password">รหัสผ่าน</label>
         <%= f.password_field :password, :size => 30, :class => 'textfield' -%>
       </p>
       <p>
-        <label for="user_password_confirmation">Confirm Password</label>
+        <label for="user_password_confirmation">ยืนยัน รหัสผ่าน</label>
         <%= f.password_field :password_confirmation, :size => 30, :class => 'textfield' -%>
       </p>
       <p>
-        <%= f.submit 'Add User', :class => 'button' -%>
+        <%= f.submit 'เพิ่มผู้ใช้งาน', :class => 'button' -%>
       </p>
     <% end -%>
   </div>

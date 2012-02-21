@@ -29,7 +29,7 @@ class AuditSweeper < ActionController::Caching::Sweeper
             text = text + "<strong>Owner</strong> removed"
           else
             text = text + "<br/>" if !text.empty?
-            text = text + "<strong>Owner</strong> changed to #{ticket.owner.username}"
+            text = text + "<strong>Owner</strong> changed to #{ticket.owner.first_name}   #{ticket.owner.last_name}"
           end
         end
         if ticket.priority_id_changed?

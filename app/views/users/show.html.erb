@@ -1,6 +1,6 @@
 <div class="right" id="controls">
   <% if @current_user.admin? -%>
-    <%= link_to 'Edit', edit_user_path(@user), :class => 'edit-user', :title => 'Edit user' %> |
+    <%= link_to 'แก้ใขข้อมูลส่วนตัว', edit_user_path(@user), :class => 'edit-user', :title => 'แก้ใขข้อมูลส่วนตัว' %> |
     <% unless @user.enabled? -%>
       <%= link_to 'Enable', toggle_user_path, :confirm => "Really enable #{@user.username}?", :method => :post, :class => 'enable', :title => 'Enable user' -%> |
     <% else -%>
@@ -10,9 +10,9 @@
       <%= link_to 'Unlock', unlock_user_path, :confirm => "Really unlock #{@user.username}?", :method => :post, :class => 'unlock', :title => 'Unlock user' -%> |
     <% end -%>
   <% elsif @current_user.id == @user.id -%>
-    <%= link_to 'Edit', edit_user_path, :class => 'edit-user', :title => 'Edit user' %> |
+    <%= link_to 'แก้ไขข้อมูล', edit_user_path, :class => 'edit-user', :title => 'Edit user' %> |
   <% end -%>
-  <%= link_to 'Back', :back, :class => 'back', :title => 'Go back' -%>
+  <%= link_to 'ย้อนกลับ', :back, :class => 'back', :title => 'Go back' -%>
 </div>
 
 <%#= image_tag "avatar.gif", :alt => "", :class => "profile-avatar" %>
@@ -21,16 +21,16 @@
 
 <table class="profile <%= @user.enabled? ? '' : 'disabled' -%>">
   <tr>
-    <td class="field">First name:</td><td class="value"><%=h @user.first_name -%></td>
-    <td class="field">Last name:</td><td class="value"><%=h @user.last_name -%></td>
+    <td class="field">ชื่อ:</td><td class="value"><%=h @user.first_name -%></td>
+    <td class="field">นามสกุล:</td><td class="value"><%=h @user.last_name -%></td>
   </tr>
   <tr>
-    <td class="field">Email:</td><td class="value"><%=h @user.email -%></td>
-    <td class="field">Timezone:</td><td class="value"><%=h @user.time_zone -%></td>
+    <td class="field">อีเมล:</td><td class="value"><%=h @user.email -%></td>
+    <td class="field">โซนเวลา:</td><td class="value"><%=h @user.time_zone -%></td>
   </tr>
   <tr>
-    <td class="field">Last login:</td><td class="value"><%= nice_date @user.last_login_at unless @user.last_login_at.nil? -%></td>
-    <td class="field">Last login IP:</td><td class="value"><%=h @user.last_login_ip -%></td>
+    <td class="field">ใช้งานระบบเมื่อ:</td><td class="value"><%= nice_date @user.last_login_at unless @user.last_login_at.nil? -%></td>
+    <td class="field">IP ใช้งานล่าท้าย:</td><td class="value"><%=h @user.last_login_ip -%></td>
   </tr>
   <% unless @user.enabled? -%>
   <tr>

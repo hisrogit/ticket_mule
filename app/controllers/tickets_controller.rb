@@ -5,6 +5,35 @@ class TicketsController < ApplicationController
   before_filter :require_admin, :only => [:destroy]
   before_filter :get_alert, :only => [:show]
   cache_sweeper :audit_sweeper
+  skip_before_filter :verify_authenticity_token,:only => [:generate_contact]
+  
+  def generate_contact
+    
+    rs = Contact.find(
+		  :all,
+		  :conditions => "group_id = #{params[:id]}"
+		).collect {|p|[ p.full_name, p.id ]}
+    
+    str = '<select name="ticket[contact_id]" id="ticket_contact_id"><option value="">------</option>'
+    rs.each {|v|
+      str += "<option value='#{v[1]}'>#{v[0]}</option>"
+    }
+    str += "</select>"
+    
+    
+    render :text => str
+    #render :update do |page|      
+    #    page.replace_html 'contact_ajax', select(
+    #                                          'ticket', 
+    #                                          'contact_id', 
+    #                                          Contact.find(
+    #                                                      :all,
+    #                                                      :conditions => "group_id = #{params[:id]}"
+    #                                                    ).collect {|p|[ p.full_name, p.id ]}, 
+    #                                          {:include_blank => '------'}
+    #                                        )   
+    #end
+  end
 
   def index
     @tickets_per_page = tickets_per_page
@@ -25,17 +54,25 @@ class TicketsController < ApplicationController
         end_date = end_date.next.midnight.gmtime
         params[:search][:created_at_lt] = end_date.midnight
       end
-      @tickets = Ticket.search(params[:search]).paginate(
+      search_tmp = (params[:search][:owned_by_equals].nil?)? "":" and owned_by = '#{params[:search][:owned_by_equals]}'"
+      search_tmp2 = (!@current_user.admin and !@current_user.staff and !@current_user.it)? " or group_id = '#{ @current_user.group_id}'":""
+      #@tickets = Ticket.search(params[:search]).paginate(
+      @tickets = Ticket.paginate(
         :page => params[:page],
         :include => [:creator, :owner, :group, :status, :priority, :contact],
         :order => 'updated_at DESC',
-        :per_page => @tickets_per_page)
+        :per_page => @tickets_per_page,
+	#:conditions =>(@current_user.admin)? "":"(owned_by = '#{ @current_user.id}' or created_by = '#{ @current_user.id}' #{search_tmp2}) and status_id = '#{params[:search][:status_id_equals]}'")
+:conditions =>(@current_user.admin)? "status_id = '#{params[:search][:status_id_equals]}'" + search_tmp:"(owned_by = '#{ @current_user.id}' or created_by = '#{ @current_user.id}' or group_id = '#{ @current_user.group_id}') and status_id = '#{params[:search][:status_id_equals]}'")
     else
-      @tickets = Ticket.not_closed.paginate(
+      search_tmp2 = (!@current_user.admin and !@current_user.staff and !@current_user.it)? " or group_id = '#{ @current_user.group_id}'":""
+      #@tickets = Ticket.not_closed.paginate(
+      @tickets = Ticket.paginate(
         :page => params[:page],
         :include => [:creator, :owner, :group, :status, :priority, :contact],
         :order => 'updated_at DESC',
-        :per_page => @tickets_per_page)
+        :per_page => @tickets_per_page,
+:conditions =>(@current_user.admin or @current_user.staff)? "status_id != '#{@closed_status.id}'":"(owned_by = '#{@current_user.id}' or created_by = '#{@current_user.id}' #{search_tmp2})  and status_id != '#{@closed_status.id}' ")
     end
 
     @total_tickets = @tickets.total_entries
@@ -140,5 +177,6 @@ class TicketsController < ApplicationController
   def get_alert
     @alert = Alert.find_by_user_id_and_ticket_id(@current_user.id, params[:id])
   end
-  
+
+
 end

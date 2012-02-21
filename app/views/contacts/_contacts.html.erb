@@ -1,8 +1,8 @@
 <table class="listing" cellspacing="0">
   <tr class="header">
-    <th>Name</th>
-    <th>Affiliation</th>
-    <th>Disabled at</th>
+    <th>ชื่อ - นามสกุล</th>
+    <th>การติดต่อ</th>
+    <th>ยกเลิกการติดต่อเมื่อ</th>
   </tr>
   <% @contacts.each do |contact| -%>
   <tr class="<%= cycle("list-line-odd", "list-line-even") -%>">
@@ -15,5 +15,5 @@
 
 <%= will_paginate @contacts, :previous_label => '&#8249;', :next_label => '&#8250;' %>
 <% if @total_contacts -%>
-  <div style="margin: 6px 0; font-style: italic; color: #333; text-align:center;"><%=@total_contacts %> <%= @total_contacts == 1 ? "contact" : "contacts" %> found.</div>
+  <div style="margin: 6px 0; font-style: italic; color: #333; text-align:center;"><%=@total_contacts %> <%= @total_contacts == 1 ? "" : "" %> ผู้ติดต่อ</div>
 <% end -%>

@@ -1,0 +1,58 @@
+
+<style>
+  .list-line-odd td {
+    padding: 15px 0px 15px 0px
+  }
+  
+  .list-line-even td {
+    padding: 15px 0px 15px 0px
+  }
+  
+  #left-column {
+      float: left;
+      margin: 0 1% 0 0;
+      width: 98%;
+  }   
+</style>
+<%= render :partial => 'tickets_per_page', :locals => { :per_page => @tickets_per_page } -%>
+
+<table class="listing" cellspacing="0">
+  <thead>
+  <tr class="header">
+    <th>ตั๋วงาน #</th>
+    <th>แจ้งเมื่อ</th>
+    <th>หัวข้อ</th>
+    <th>หน่วยงาน</th>
+    <th>สถานะ</th>
+    <th>ผู้รับงาน</th>
+    <th>ผู้ติดต่อ</th>
+    
+  </tr>
+  </thead>
+  <tbody>
+  <% @tickets.each do |ticket| -%>
+  <tr class="<%= cycle("list-line-odd", "list-line-even") -%>" >
+    <td><b><%= ticket.id %></b></td>    
+    <td><%= to_datetime_th ticket.created_at -%></td>
+    <td><%=h truncate(ticket.title, :length => 40) -%></td>
+    <td><%= ticket.group.name -%></td>
+    <td>
+      <% if ticket.status.admin == true %>
+	<%= ticket.status.name -%>
+	<br>
+	<%= to_date_th ticket.date_status -%>
+      <% else %>
+	<%= ticket.status.name -%>
+      <% end %>
+    </td>
+    <td><%= ticket.owner.full_name if !ticket.owner.nil? %></td>
+    <td><%= ticket.contact.full_name if !ticket.contact.nil?  %></td>    
+  </tr>
+  <% end -%>
+  </tbody>
+</table>
+
+<%= will_paginate @tickets, :previous_label => '&#8249;', :next_label => '&#8250;' %>
+<% if @total_tickets -%>
+  <div style="margin: 6px 0; font-style: italic; color: #333; text-align:center;"><%=@total_tickets %> <%= @total_tickets == 1 ? "" : "" %> ตั๋วงาน</div>
+<% end -%>

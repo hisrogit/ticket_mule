@@ -3,71 +3,111 @@
 
 $(function() {
   //layouts/application.html.erb-------------------------
-  $("#jumpbox").submit(doTicketJump);
+  if ($("#jumpbox") != null){
+    $("#jumpbox").submit(doTicketJump);
+  }
 
   //tickets/index.html.erb-------------------------------
-  $("#ticket-filter").hide();
+  if ($("#ticket-filter") != null){
+    $("#ticket-filter").hide();
+  }
 
   //tickets/show.html.erb--------------------------------
-  $("#add-comment").hide();
-  $("#add-attachment").hide();
-  $("#attachments-toggle").click(function() {
-    $("#attachment-list").slideToggle();
-  });
-  $("#comments-toggle").click(function() {
-    $("#comment-list").slideToggle();
-  });
+  if ($("#add-comment") != null){  
+    $("#add-comment").hide();
+  }
+  if ($("#add-attachment") != null){
+    $("#add-attachment").hide();  
+  }
+  if ($("#attachments-toggle") != null){
+    $("#attachments-toggle").click(function() {
+      $("#attachment-list").slideToggle();
+    });
+  }
+  if ($("#comments-toggle") != null){
+    $("#comments-toggle").click(function() {
+      $("#comment-list").slideToggle();
+    });
+  }
 
   //dashboard/index.html.erb-----------------------------
-  $("#timeline-toggle").click(function() {
-    $("#timeline-wrapper").slideToggle();
-  });
-  $("#active-tickets").click(function() {
-    $("#active-listing").slideToggle();
-  });
-  $("#closed-tickets").click(function() {
-    $("#closed-listing").slideToggle();
-  });
+  if ($("#timeline-toggle") != null){
+    $("#timeline-toggle").click(function() {
+      $("#timeline-wrapper").slideToggle();
+    });
+  }
+  if ($("#active-tickets") != null){
+    $("#active-tickets").click(function() {
+      $("#active-listing").slideToggle();
+    });
+  }
+  
+  if ($("#closed-tickets") != null){
+    $("#closed-tickets").click(function() {
+      $("#closed-listing").slideToggle();
+    });
+  }
 
   //users/show.html.erb----------------------------------
-  $("#alerts-toggle").click(function() {
-    $("#alert-list").slideToggle();
-  });
-  $("#assigned-to-toggle").click(function() {
-    $("#assigned-to-listing").slideToggle();
-  });
+  if ($("#alerts-toggle") != null){
+    $("#alerts-toggle").click(function() {
+      $("#alert-list").slideToggle();
+    });
+  }
+  
+  if ($("#assigned-to-toggle") != null){
+    $("#assigned-to-toggle").click(function() {
+      $("#assigned-to-listing").slideToggle();
+    });
+  }
 
   //admin/index.html.erb---------------------------------
-  $("#group-enabled-toggle").click(function() {
-    $("#group-enabled-list").slideToggle();
-  });
-  $("#group-disabled-toggle").click(function() {
-    $("#group-disabled-list").slideToggle();
-  });
-  $("#status-enabled-toggle").click(function() {
-    $("#status-enabled-list").slideToggle();
-  });
-  $("#status-disabled-toggle").click(function() {
-    $("#status-disabled-list").slideToggle();
-  });
-  $("#priority-enabled-toggle").click(function() {
-    $("#priority-enabled-list").slideToggle();
-  });
-  $("#priority-disabled-toggle").click(function() {
-    $("#priority-disabled-list").slideToggle();
-  });
+  if ($("#group-enabled-toggle") != null){
+    $("#group-enabled-toggle").click(function() {
+      $("#group-enabled-list").slideToggle();
+    });
+  }
+  if ($("#group-disabled-toggle") != null){
+    $("#group-disabled-toggle").click(function() {
+      $("#group-disabled-list").slideToggle();
+    });
+  }
+  if($("#status-enabled-toggle") != null){
+    $("#status-enabled-toggle").click(function() {
+      $("#status-enabled-list").slideToggle();
+    });
+  }
+  if($("#status-disabled-toggle") != null) {
+    $("#status-disabled-toggle").click(function() {
+      $("#status-disabled-list").slideToggle();
+    });
+  }
+  if ($("#priority-enabled-toggle") != null){
+    $("#priority-enabled-toggle").click(function() {
+      $("#priority-enabled-list").slideToggle();
+    });
+  }
+  if ($("#priority-disabled-toggle") != null){
+    $("#priority-disabled-toggle").click(function() {
+      $("#priority-disabled-list").slideToggle();
+    });
+  }
 
   // site-wide submit buttons...disable on form submit
-  $('form').submit(function(){
-    $('input[type=submit]', this).attr('disabled', 'disabled');
-  });
-
+  if ($('form') != null){
+    $('form').submit(function(){
+      $('input[type=submit]', this).attr('disabled', 'disabled');
+    });
+  }
+  
   // site-wide toggle headers
-  $(".toggle").toggle(function() {
-    $(this).addClass("closed");
-    }, function () {
-    $(this).removeClass("closed");
-  });
+  if ($(".toggle") != null){
+    $(".toggle").toggle(function() {
+      $(this).addClass("closed");
+      }, function () {
+      $(this).removeClass("closed");
+    });
+  }
     
   // site-wide flash message animation
   hideFlash();
@@ -86,7 +126,9 @@ function doTicketJump() {
 //hide flash messages with jQuery fadeOut
 function hideFlash() {
   var flash_div = $(".flash");
-  setTimeout(function() { flash_div.fadeOut(2500, function() { flash_div.html(""); flash_div.hide(); })}, 3500);
+  if (flash_div != null){
+    setTimeout(function() { flash_div.fadeOut(2500, function() { flash_div.html(""); flash_div.hide(); })}, 3500);
+  }
 }
 
 //get today's date

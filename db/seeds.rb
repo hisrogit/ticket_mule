@@ -6,13 +6,10 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
 
-Group.create :name => 'Accounting'
-Group.create :name => 'Human Resources'
-Group.create :name => 'Management'
-Group.create :name => 'Marketing'
-Group.create :name => 'Operations'
-Group.create :name => 'Development'
-Group.create :name => 'Sales'
+Group.create :name => 'Researcher'
+Group.create :name => 'Research Assistant'
+Group.create :name => 'Database Admin'
+Group.create :name => 'Admin'
 
 # Do not delete 'open' and 'closed' statuses...those are required
 Status.create :name => 'Open'
@@ -26,14 +23,14 @@ Priority.create :name => 'Medium'
 Priority.create :name => 'Low'
 
 user_attrs = {
-  :username => 'admin',
-  :password => 'welcome',
-  :password_confirmation => 'welcome',
-  :email => 'admin@mycompany.com',
-  :email_confirmation => 'admin@mycompany.com',
-  :first_name => 'The',
-  :last_name => 'Admin',
-  :time_zone => 'Central Time (US & Canada)'
+  :username => 'manisa',
+  :password => 'manisa',
+  :password_confirmation => 'manisa',
+  :email => 'manisa@hisro.or.th',
+  :email_confirmation => 'manisa@hisro.or.th',
+  :first_name => 'Manisa',
+  :last_name => 'Homsiri',
+  :time_zone => 'Bangkok'
 }
 User.create(user_attrs)
 

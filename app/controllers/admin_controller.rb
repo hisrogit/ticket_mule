@@ -53,6 +53,9 @@ class AdminController < ApplicationController
   end
 
   def add_user
+    if params[:user][:it].nil?
+      params[:user][:it] = false
+    end
     @user = User.new(params[:user])
 
     respond_to do |format|

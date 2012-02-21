@@ -1,5 +1,16 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+
+
+  def to_datetime_th dt
+         dt_r = dt.day.to_s + "/" + dt.month.to_s + "/" + (dt.year + 543).to_s + " " + dt.hour.to_s + ":" + dt.min.to_s
+         dt_r
+  end
+  
+  def to_date_th dt
+         dt_r = dt.day.to_s + "/" + dt.month.to_s + "/" + (dt.year + 543).to_s
+         dt_r
+  end
   
   def nice_date date
     # 31 Jan 2009 12:00 pm

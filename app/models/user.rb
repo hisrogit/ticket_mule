@@ -16,13 +16,17 @@ class User < ActiveRecord::Base
   has_many :attachments
   has_many :alerts, :dependent => :destroy
   has_many :alert_tickets, :through => :alerts, :class_name => 'Ticket', :source => :ticket
+  
+  belongs_to :group
 
   # Validations
   validates_presence_of     :first_name, :last_name
   validates_confirmation_of :email
 
   # Scopes
-  named_scope :enabled, :order => 'username', :conditions => { :disabled_at => nil }
+  named_scope :enabled, :order => 'username', :conditions => { :disabled_at => nil}
+ 
+  named_scope :owner_it, :order => 'username', :conditions => { :disabled_at => nil,:it => true}
 
   attr_protected :admin
 
@@ -34,7 +38,7 @@ class User < ActiveRecord::Base
     if first_name.blank?
       last_name
     else
-      [last_name, first_name].compact.join(', ')
+      [first_name, last_name].compact.join(' ')
     end
   end
 

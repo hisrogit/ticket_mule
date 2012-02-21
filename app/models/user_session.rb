@@ -10,6 +10,6 @@ class UserSession < Authlogic::Session::Base
   failed_login_ban_for 0
 
   # logout user on session timeout
-  logout_on_timeout true
+  logout_on_timeout false
 
 end

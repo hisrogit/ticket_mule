@@ -1,0 +1,16 @@
+common: &shared
+  adapter: postgresql
+  encoding: utf8
+  host: localhost
+
+development:
+  database: ticketmule
+  username: postgres
+  password:
+  <<: *shared
+
+production:
+  database: ticketmule
+  username: postgres
+  password:
+  <<: *shared

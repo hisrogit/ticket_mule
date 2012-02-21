@@ -6,10 +6,36 @@ class ContactsController < ApplicationController
 
   def index
     unless params[:index]
-      @contacts = Contact.paginate :page => params[:page], :order => 'last_name, first_name', :per_page => 10
+      if @current_user.admin
+        @contacts = Contact.paginate :page => params[:page],
+                      :order => 'first_name, last_name', 
+                      :per_page => 10
+      else
+        @contacts = Contact.paginate :page => params[:page],
+                      :conditions => "group_id = #{@current_user.group_id}",
+                      :order => 'first_name, last_name', 
+                      :per_page => 10
+      end
     else
       @initial = params[:index]
-      @contacts = Contact.paginate :page => params[:page], :conditions => ["last_name like ?", @initial+'%'], :order => 'last_name, first_name', :per_page => 10
+      if @current_user.admin
+        @contacts = Contact.paginate :page => params[:page], 
+                      :conditions => [
+                          "first_name like ? OR last_name like ?", 
+                          @initial+'%',
+                          @initial+'%'
+                      ],
+                      :order => 'first_name, last_name', :per_page => 10
+      else
+        @contacts = Contact.paginate :page => params[:page], 
+                      :conditions => [
+                          "(first_name like ? OR last_name like ? ) and group_id = ?", 
+                          @initial+'%',
+                          @initial+'%',
+                          @current_user.group_id
+                      ],
+                      :order => 'first_name, last_name', :per_page => 10
+      end
     end
     @total_contacts = @contacts.total_entries
     
@@ -39,9 +65,12 @@ class ContactsController < ApplicationController
   def edit
   end
 
-  def create
+  def create     
+    if params[:contact][:group_id].nil?
+      params[:contact][:group_id] = @current_user.group_id
+    end
+    
     @contact = Contact.new(params[:contact])
-
     respond_to do |format|
       if @contact.save
         flash[:success] = "#{@contact.full_name} was successfully created!"
@@ -55,6 +84,10 @@ class ContactsController < ApplicationController
   end
 
   def update
+    if params[:contact][:group_id].nil?
+      params[:contact][:group_id] = @current_user.group_id
+    end   
+    
     respond_to do |format|
       if @contact.update_attributes(params[:contact])
         flash[:success] = "#{@contact.full_name} was successfully updated!"

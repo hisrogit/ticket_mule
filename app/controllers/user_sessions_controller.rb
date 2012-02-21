@@ -14,7 +14,11 @@ class UserSessionsController < ApplicationController
         msg = msg + "&nbsp;Your last login was on <strong>#{@user_session.user.last_login_at.strftime("%Y-%m-%d %I:%M %p")}</strong> from <strong>#{@user_session.user.last_login_ip}</strong>"
       end
       flash[:success] = msg
-      redirect_back_or_default dashboard_index_path
+	if @user_session.user.admin == true	
+      		redirect_back_or_default dashboard_index_path
+	else
+      		redirect_back_or_default '/tickets'
+	end
     else
       if @user_session.being_brute_force_protected?
         flash[:error] = "User is locked: exceeded failed login limit!"

@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-  map.root :controller => 'dashboard'
+  #map.root :controller => 'dashboard'
+  map.root :controller => 'tickets'
 
   map.login '/login', :controller => 'user_sessions', :action => 'new'
   map.logout '/logout', :controller => 'user_sessions', :action => 'destroy'
@@ -7,10 +8,18 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tickets, :has_many => [:comments, :attachments]
 
   map.connect 'tickets/set_tickets_per_page/:per_page', :controller => 'tickets', :action => 'set_tickets_per_page'
+  
+  map.connect 'tickets/generate_contact', :controller => 'tickets', :action => 'generate_contact'
 
   map.connect 'attachments/:ticket_id/:id', :controller => 'attachments', :action => 'show', :conditions => { :method => :get }
 
   map.resources :dashboard, :only => :index
+  
+  map.resources :list_open
+  map.connect 'list_open/set_tickets_per_page/:per_page', :controller => 'list_open', :action => 'set_tickets_per_page'
+  
+  map.resources :list_close
+   map.connect 'list_close/set_tickets_per_page/:per_page', :controller => 'list_close', :action => 'set_tickets_per_page'
 
   # users can add themselves
   map.resources :users, :member => { :toggle => :post, :unlock => :post }
@@ -37,7 +46,7 @@ ActionController::Routing::Routes.draw do |map|
     a.toggle_priority '/admin/toggle_priority', :action => 'toggle_priority', :conditions => { :method => :post }
   end
 
-  map.connect '*url', :controller => 'dashboard', :action => 'index'
+  #map.connect '*url', :controller => 'dashboard', :action => 'index'
 
   # The priority is based upon order of creation: first created -> highest priority.
 

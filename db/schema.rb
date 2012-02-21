@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090914141258) do
+ActiveRecord::Schema.define(:version => 20110303045735) do
 
   create_table "alerts", :force => true do |t|
     t.integer  "user_id",    :null => false
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(:version => 20090914141258) do
     t.datetime "disabled_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "group_id"
   end
 
   create_table "groups", :force => true do |t|
@@ -71,23 +72,25 @@ ActiveRecord::Schema.define(:version => 20090914141258) do
   end
 
   create_table "statuses", :force => true do |t|
-    t.string   "name",        :null => false
+    t.string   "name",                           :null => false
     t.datetime "disabled_at"
+    t.boolean  "admin",       :default => false
   end
 
   create_table "tickets", :force => true do |t|
-    t.string   "title",                         :null => false
+    t.string   "title",                                    :null => false
     t.text     "details"
-    t.integer  "group_id",                      :null => false
-    t.integer  "status_id",                     :null => false
-    t.integer  "priority_id",                   :null => false
-    t.integer  "contact_id",                    :null => false
-    t.integer  "created_by",                    :null => false
+    t.integer  "group_id",                                 :null => false
+    t.integer  "status_id",                                :null => false
+    t.integer  "priority_id",                              :null => false
+    t.integer  "contact_id",                               :null => false
+    t.integer  "created_by",                               :null => false
     t.integer  "owned_by"
     t.datetime "closed_at"
     t.integer  "comments_count", :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "date_status",    :default => '2011-11-29'
   end
 
   add_index "tickets", ["contact_id"], :name => "index_tickets_on_contact_id"
@@ -118,6 +121,9 @@ ActiveRecord::Schema.define(:version => 20090914141258) do
     t.datetime "disabled_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "staff",              :default => false, :null => false
+    t.integer  "group_id"
+    t.boolean  "it",                 :default => false
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

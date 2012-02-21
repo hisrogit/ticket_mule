@@ -20,16 +20,19 @@ class Ticket < ActiveRecord::Base
 
   # Scopes
   named_scope :not_closed, :joins => :status, :conditions => ['statuses.name <> ?', 'Closed']
+  
+  named_scope :closed_i, :joins => :status, :conditions => ['statuses.name = ?', 'Closed']
+  
   named_scope :recently_assigned_to, lambda { | user_id | { :limit => 5, :conditions => { :owned_by => user_id }, :include => [:creator, :owner, :group, :status, :priority, :contact], :order => 'updated_at DESC' } }
   named_scope :active_tickets, :limit => 5, :include => [:creator, :owner, :group, :status, :priority], :order => 'updated_at DESC'
   named_scope :closed_tickets, :limit => 5, :joins => :status, :include => [:creator, :owner, :group, :status, :priority], :conditions => ['statuses.name = ?', 'Closed'], :order => 'closed_at DESC'
 
   def self.timeline_opened_tickets
-    self.count(:group => 'date(created_at)', :having => ['date_created_at >= ? and date_created_at <= ?', (Time.zone.now.beginning_of_day - 30.days).to_s, (Time.zone.now.end_of_day - 1.day).to_s])
+    self.count(:group => 'date(created_at)', :having => ['date(created_at) >= ? and date(created_at) <= ?', (Time.zone.now.beginning_of_day - 30.days).to_s, (Time.zone.now.end_of_day - 1.day).to_s])
   end
 
   def self.timeline_closed_tickets
-    self.count(:group => 'date(closed_at)', :having => ['date_closed_at >= ? and date_closed_at <= ?', (Time.zone.now.beginning_of_day - 30.days).to_s, (Time.zone.now.end_of_day - 1.day).to_s])
+    self.count(:group => 'date(closed_at)', :having => ['date(closed_at) >= ? and date(closed_at) <= ?', (Time.zone.now.beginning_of_day - 30.days).to_s, (Time.zone.now.end_of_day - 1.day).to_s])
   end
 
   def closed?
